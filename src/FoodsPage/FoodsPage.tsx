@@ -85,11 +85,11 @@ const FoodsPage: React.FC = () => {
                   <td>{Price}</td>
                   <td>
                     <div className="d-flex gap-1 btn-group">
-                      <button className="btn btn-success d-flex flex-row justify-content-center align-items-center gap-2 btn-sm py-lg-3">
-                        <img src={edit} alt={label} /> <p className="d-none d-lg-block">Edit</p>
+                      <button className="btn btn-success d-flex flex-row justify-content-center align-items-center gap-2 btn-sm py-lg-1">
+                        <img src={edit} alt={label} /> <p className="d-none d-lg-block mt-3">Edit</p>
                       </button>
-                      <button className="btn btn-danger d-flex flex-row justify-content-center align-items-center gap-2 btn-sm py-lg-3">
-                        <img src={Delete} alt={label} /> <p className="d-none d-lg-block">Delete</p>
+                      <button className="btn btn-danger d-flex flex-row justify-content-center align-items-center gap-2 btn-sm py-lg-1">
+                        <img src={Delete} alt={label} /> <p className="d-none d-lg-block mt-3">Delete</p>
                       </button>
                     </div>
                   </td>
