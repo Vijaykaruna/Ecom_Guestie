@@ -76,7 +76,7 @@ function HomePage(){
                  <br />
                  <li><h4>With Guestie, guests can enjoy the convenience of browsing an interactive menu, placing orders all from the comfort of the room.</h4></li>
                  <br />
-                 <li><h4>Guestie streamlines ordering, enhancing huest satisfaction and leaving a lasting impression.</h4></li>
+                 <li><h4>Guestie streamlines ordering, enhancing guest satisfaction and leaving a lasting impression.</h4></li>
                  </ul>
               </div>
              </div>
