@@ -1,13 +1,12 @@
 import React from "react";
 
-// Define TypeScript interface for orders
 interface Order {
   idNo: string;
   label: string;
   roomNo: string;
   date: string;
-  Status: "Delivered" | "Rejected"; // Restrict Status to known values
-  color: "success" | "danger"; // Restrict color to known values
+  Status: "Delivered" | "Rejected";
+  color: "success" | "danger"; 
 }
 
 const OrderListPage: React.FC = () => {

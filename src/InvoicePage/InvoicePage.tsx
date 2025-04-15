@@ -1,7 +1,6 @@
 import React from "react";
 import add from "../assets/add.png";
 
-// Define TypeScript interface for invoices
 interface Invoice {
   invoiceId: string;
   orderId: string;
@@ -10,7 +9,7 @@ interface Invoice {
   date: string;
   price: string;
   Status: string;
-  color: "success" | "danger"; // Restrict color to known values
+  color: "success" | "danger"; 
 }
 
 const InvoicePage: React.FC = () => {
