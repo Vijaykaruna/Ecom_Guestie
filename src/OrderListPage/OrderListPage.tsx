@@ -23,6 +23,7 @@ const OrderListPage: React.FC = () => {
   return (
     <div className="container-fluid rounded-4 my-3 mx-4 px-lg-5 px-1 py-2 col-12 bg-light mx-auto shadow-lg">
       <p className="h5 my-5">Order List:</p>
+      <div className="table-responsive">
       <table className="table table-striped table-bordered align-middle">
         <thead className="border">
           <tr>
@@ -47,6 +48,7 @@ const OrderListPage: React.FC = () => {
           ))}
         </tbody>
       </table>
+     </div>
     </div>
   );
 };

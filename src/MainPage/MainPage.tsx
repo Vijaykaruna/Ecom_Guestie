@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from '../assets/logo.png';
 import user from '../assets/user.png';
 import bell from '../assets/bell.png';
@@ -16,10 +16,31 @@ import ReviewPage from "../ReviewPage/ReviewPage";
 import Modal from 'react-bootstrap/Modal';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function MainPage(){
   
     const navigate = useNavigate();
+    const[name, setName] = useState('');
+    const[mail, setMail] = useState('');
+
+    useEffect(() => {
+      axios.get('http://localhost:5000/profile', {withCredentials: true})
+      .then( res => {
+        setName(res.data.name);
+        setMail(res.data.email)
+      })
+    },[])
+
+    function Logout() {
+      axios.post('http://localhost:5000/logout', {withCredentials: true})
+      .then(res => {
+        console.log(res);
+        setName('');
+        setMail('')
+        navigate("/login")
+      })
+    }
     
      const [activeLink, setActiveLink] = useState('#dashboard');
       const menuItems = [
@@ -81,7 +102,7 @@ function MainPage(){
           </div>
         </div>
       </div>
-      <div className="col py-3 bg-secondary bg-opacity-10">
+      <div className="col-10 py-3 bg-secondary bg-opacity-10">
           {activeLink === '#dashboard' && <Dashboard />}
           {activeLink === '#foods' && <FoodsPage />}
           {activeLink === '#review' && <ReviewPage/>}
@@ -100,10 +121,9 @@ function MainPage(){
              <Offcanvas.Title>Profile</Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <p>Name: Vijay</p>
-              <p>Mobile: 8759596769</p>
-              <p>Email: Vijay@gmail.com</p>
-              <button className="btn btn-danger" onClick={() => navigate("/login")}>Log Out</button>
+              <p>Name: {name}</p>
+              <p>Email: {mail}</p>
+              <button className="btn btn-danger" onClick={Logout}>Log Out</button>
             </Offcanvas.Body>
           </Offcanvas>
 

@@ -1,9 +1,9 @@
-import React from "react";
+//import { useEffect } from "react";
 import TotalRooms from "../assets/totalRooms.png";
 import TotalSales from "../assets/totalSale.png";
 import TotalOrders from "../assets/totalOrder.png";
+//import axios from "axios";
 
-// Define types for dashboard statistics
 interface DashboardCard {
   title: string;
   img: string;
@@ -12,7 +12,6 @@ interface DashboardCard {
   color: "success" | "danger";
 }
 
-// Define types for order details
 interface OrderDetail {
   RoomNo: string;
   DateTime: string;
@@ -21,7 +20,8 @@ interface OrderDetail {
   color: "success" | "danger";
 }
 
-const Dashboard: React.FC = () => {
+const Dashboard: React.FC = () => { 
+
   const dashTable: DashboardCard[] = [
     { title: "Total Rooms", img: TotalRooms, values: "40,689", label: "8.5% Up from yesterday", color: "success" },
     { title: "Total Orders", img: TotalOrders, values: "10,293", label: "1.5% Up from past week", color: "success" },
@@ -56,6 +56,7 @@ const Dashboard: React.FC = () => {
       {/* Order Details Table */}
       <div className="rounded-4 my-5 mx-4 px-lg-5 px-1 py-2 col-12 bg-light mx-auto shadow-lg">
         <p className="h5 my-4">Order Details:</p>
+        <div className="table-responsive">
         <table className="table table-striped table-bordered align-middle">
           <thead className="border">
             <tr>
@@ -78,6 +79,7 @@ const Dashboard: React.FC = () => {
             ))}
           </tbody>
         </table>
+       </div>
       </div>
     </div>
   );

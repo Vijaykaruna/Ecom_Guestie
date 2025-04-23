@@ -1,46 +1,148 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import TotalFoods from "../assets/totalFoods.png";
 import Dosa from "../assets/dosa.png";
 import add from "../assets/add.png";
 import edit from "../assets/edit.png";
 import Remove from "../assets/delete.png";
+import axios from "axios";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-// Define types for food categories
 interface FoodCategory {
   title: string;
   img: string;
-  label: string;
-}
-
-// Define types for food items
-interface FoodItem {
-  img: string;
-  label: string;
-  Category: string;
-  Price: string;
-  edit: string;
-  Delete: string;
+  label: Number;
 }
 
 const FoodsPage: React.FC = () => {
-  const FoodsCategory: FoodCategory[] = [
-    { title: "BreakFast", img: TotalFoods, label: "20" },
-    { title: "Lunch", img: TotalFoods, label: "30" },
-    { title: "Dinner", img: TotalFoods, label: "35" },
-    { title: "Refreshments", img: TotalFoods, label: "50" },
-  ];
+  
+  type foods = {
+    id: any;
+    title: String;
+    category: String;
+    price: Number;
+    _id: String;
+  };
 
-  const Foods: FoodItem[] = new Array(10).fill({
-    img: Dosa,
-    label: "Dosa",
-    Category: "BreakFast",
-    Price: "Rs 30.00",
-    edit: edit,
-    Delete: Remove,
-  });
+  const[food, setFoods] = useState<foods[]>([]);
+  const[title, setTitle] = useState('');
+  const[category, setCategory] = useState('');
+  const[id, setId]=useState('');
+  const[price, setPrice] =useState<number|string>('');
+  const[show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const[BreakFast, setBreakFast] = useState<Number>(0);
+  const[Lunch, setLunch] = useState(0);
+  const[Dinner, setDinner] = useState(0);
+  const[Refreshment, setRefreshment] = useState(0);
+
+  useEffect(() =>{
+    axios.get("http://localhost:5000/profile", {withCredentials: true})
+    .then(res => {
+      setId(res.data.id);
+    })
+    .catch(err => console.log(err));
+  },[])
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/foodItems", {withCredentials: true})
+    .then(res => {
+      setFoods(res.data);
+    })
+    .catch(err => console.log(err));
+   },[])
+
+   function handleAddFood(){
+    console.log(title, category, price);
+    axios.post("http://localhost:5000/addFood", {id, title, category, price})
+    .then(res => {
+      console.log(res);
+      setTitle('');
+      setCategory('');
+      setPrice('');
+      setShow(false);
+    })
+    .catch(err => {console.log(err)})
+   }
+   
+   useEffect(() => {
+    axios.get("http://localhost:5000/breakfast", {withCredentials: true})
+    .then(res => {
+      setBreakFast(res.data);
+    })
+    .catch(err => console.log(err));
+   },[])
+   useEffect(() => {
+    axios.get("http://localhost:5000/lunch", {withCredentials: true})
+    .then(res => {
+      setLunch(res.data);
+    })
+    .catch(err => console.log(err));
+   },[])
+   useEffect(() => {
+    axios.get("http://localhost:5000/dinner", {withCredentials: true})
+    .then(res => {
+      setDinner(res.data);
+    })
+    .catch(err => console.log(err));
+   },[])
+   useEffect(() => {
+    axios.get("http://localhost:5000/refreshment", {withCredentials: true})
+    .then(res => {
+      setRefreshment(res.data);
+    })
+    .catch(err => console.log(err));
+   },[])
+
+   function handleDelete(id: any){
+     axios.delete("http://localhost:5000/delete", {data: {id}})
+     .then(res => {
+      console.log(res);
+     })
+     .catch(err => console.log(err));
+   }
+
+  const FoodsCategory: FoodCategory[] = [
+    { title: "BreakFast", img: TotalFoods, label: BreakFast },
+    { title: "Lunch", img: TotalFoods, label: Lunch },
+    { title: "Dinner", img: TotalFoods, label: Dinner },
+    { title: "Refreshments", img: TotalFoods, label: Refreshment },
+  ];
 
   return (
     <div className="container-fluid">
+      <Modal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        centered  
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Add Foods</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="d-flex flex-column gap-2 bg-secondary bg-opacity-10">
+          <FloatingLabel controlId="floatingFoodName" label="Name of the foods">
+            <Form.Control type="text" placeholder="Name" value={title} onChange={(e)=> { setTitle(e.target.value)}} required/>
+          </FloatingLabel>
+          <Form.Select aria-label="Default select example" onChange={(e) => setCategory(e.target.value)}>
+            <option value="BreakFast">BreakFast</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Dinner">Dinner</option>
+            <option value="Refreshment">Refreshments</option>
+          </Form.Select>
+          <FloatingLabel controlId="floatingFoodPrice" label="Price of the foods">
+            <Form.Control type="number" placeholder="price" value={price} onChange={(e) => {setPrice(Number(e.target.value))}} required/>
+          </FloatingLabel>
+        </Modal.Body>
+        <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>Close</Button>
+          <Button variant="primary" onClick={handleAddFood}>Add</Button>
+        </Modal.Footer>
+      </Modal>
       {/* Food Categories */}
       <div className="d-flex gap-1 flex-column flex-lg-row align-items-center my-2">
         {FoodsCategory.map(({ title, img, label }, index) => (
@@ -55,10 +157,10 @@ const FoodsPage: React.FC = () => {
       </div>
 
       {/* Food List Table */}
-      <div className="rounded-4 my-5 px-lg-5 px-1 py-2 col-12 bg-light mx-auto shadow-lg">
+      <div className="rounded-4 my-5 px-lg-5 px-1 py-2 col-12 bg-light shadow-lg">
         <div className="d-flex justify-content-between align-items-center">
           <p className="h5 my-4">Foods List:</p>
-          <button className="btn btn-sm btn-primary p-2">
+          <button className="btn btn-sm btn-primary p-2" onClick={handleShow}>
             <img src={add} alt="add" className="img-fluid me-1" /> ADD
           </button>
         </div>
@@ -75,21 +177,21 @@ const FoodsPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="table-group-divider">
-              {Foods.map(({ img, label, Category, Price, edit, Delete }, index) => (
-                <tr key={index}>
+              {food.map((food) => (
+                <tr key={food._id}>
                   <td>
-                    <img src={img} alt={label} className="img-fluid" />
+                    <img src={Dosa} alt={food.title} className="img-fluid" />
                   </td>
-                  <td>{label}</td>
-                  <td>{Category}</td>
-                  <td>{Price}</td>
+                  <td>{food.title}</td>
+                  <td>{food.category}</td>
+                  <td>{food.price ? `Rs.${food.price}` : "Price not available"}</td>
                   <td>
                     <div className="d-flex gap-1 btn-group">
                       <button className="btn btn-success d-flex flex-row justify-content-center align-items-center gap-2 btn-sm py-lg-1">
-                        <img src={edit} alt={label} /> <p className="d-none d-lg-block mt-3">Edit</p>
+                        <img src={edit} alt="Edit" /> <p className="d-none d-lg-block mt-3">Edit</p>
                       </button>
                       <button className="btn btn-danger d-flex flex-row justify-content-center align-items-center gap-2 btn-sm py-lg-1">
-                        <img src={Delete} alt={label} /> <p className="d-none d-lg-block mt-3">Delete</p>
+                        <img src={Remove} alt="Delete" /> <p className="d-none d-lg-block mt-3" onClick={() => handleDelete(food._id) }>Delete</p>
                       </button>
                     </div>
                   </td>
